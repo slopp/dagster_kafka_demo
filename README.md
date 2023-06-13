@@ -14,7 +14,9 @@ In this example:
 
 - For each run, the batch of messages is passed to the Dagster asset through configuration and then processed. In this example, the `MyAssetConfig.kafka_msg_batch` accepts a list of decoded `message.values`.   
 
-- The Kafka connection details are stored in a Dagster class, `KafkaResource`.
+- The Kafka connection details are stored in a Dagster class, `KafkaResource`. I've found that in practice, tuning `fetch_min_bytes` is important.
+
+- Multiple sensor replicas can be run to handle a higher message throughput rate. See `definitions.py/SENSOR_REPLICAS` as well as the `sensors` section of `dagster.yaml`.
 
 
 
@@ -65,7 +67,8 @@ Option | Description | Location
 `MAX_SENSOR_TICK_RUNTIME` | Max time for a sensor tick to run. Longer means fewer consumers but less Dagster visibility. Recommended: 10 seconds. | `kafkademo/sensors.py`
 `TIME_BETWEEN_SENSOR_TICKS` | Time between sensor ticks. Longer means increased delay in handling events, but less pressure on Kafka. Recommended: 10 seconds. | `kafkademo/sensors.py`
 Max concurrent runs | Dagster will queue runs to prevent overwhelming your run system. Default for local computer: 5 | `dagster.yaml`
-
+Sensor resources | Dagster will launch a thread pool to run concurrent sensors | `dagster.yaml`
+`SENSOR_REPLICAS` | Number of sensor replicas to run, equivalent to multiple Kafka consumers. Recommended max: # of threads in thread pool | `definitions.py`
 
 ## Next steps
 

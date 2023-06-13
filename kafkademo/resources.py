@@ -7,4 +7,4 @@ class KafkaResource(ConfigurableResource):
     topic_name: str
 
     def get_consumer(self):
-       return KafkaConsumer(self.topic_name, group_id='group1', bootstrap_servers=self.bootstrap_servers)
+       return KafkaConsumer(self.topic_name, group_id='group1', bootstrap_servers=self.bootstrap_servers, fetch_min_bytes=4000)

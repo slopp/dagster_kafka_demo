@@ -1,2 +1,6 @@
 run_queue:
   max_concurrent_runs: 5
+
+sensors:
+  use_threads: true
+  num_workers: 4
